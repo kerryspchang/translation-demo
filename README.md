@@ -119,3 +119,18 @@ spec:
             key: ftApiKey  
 ```
 
+### Recreating the Translation SMS bot using modules 
+
+```javascript
+const composer = require('@ibm-functions/composer'),    
+    translation = require('translation-demo'),
+    sendSms = require('ow-sendsms') // another project that expose a composition for sending SMS via Twilio 
+
+composer.sequence(
+    p => ({payload: p.Body, number: p.From}),
+    composer.retain(translation), 
+    p => ({body: p.result.payload, number: p.params.number}),
+    sendSms
+)
+```
+
