@@ -7,7 +7,7 @@ This is a temporary place to record some ideas and discussions on designing a "c
 * To make building a reusable cloud composition easy and intuitive 
 
 ## Motivations
-* To provide a good getting started experience and being able to let customers quickly try out some interesting composition examples 
+* To provide a good getting started experience and let customers quickly try out some interesting composition examples 
 * To create an ecosystem where developers could easily share their own compositions and also benefit from other people's work 
 
 ## Who are the users of a "composition project"? 
@@ -29,7 +29,8 @@ A person can be both a project developer and consumer. This is similar to how pe
 We use the Node module format as the base format for a composition project. A composition project is a Node module that returns one or more compositions. 
 The structure of the project module is described here: 
 * A `composition.js` that is the entry point of the module. It exports a composition or an object that contains multiple compositions, each composition can be referenced by its key name
-* A `seed.yaml` file that describes the resources used, in Kubernetes YAML format
+    - In the examples below, the deployment of cloud functions is described in `composition.js` using `composer.action` instead of in `seed.yaml`. IMO it makes the module code easier to understand to Node developers. `composer.action` could generate a seed yaml file that actually does the deployment. 
+* A `seed.yaml` file that describes the resources used and parameters to inject to cloud functions and packages, in Kubernetes YAML format
 * A `package.json` that has the standard Node module data plus an `api` field that describes the usage of the module (using OpenAPI format), and a `choice` field that has instructions for credentials/parameters that the consumer needs to fill out. Data in `api` and `choice` are used in Shell to help consumers understand and configure a project module. 
 * A `lib` folder that has the function code. Each file in `lib` is a OpenWhisk function to be deployed
 
@@ -44,7 +45,7 @@ A simple Watson Translation Node module. It returns a JSON object that has two c
 const composer = require('@ibm-functions/composer')
 module.exports = {
     translator: composer.action(`watson-translation/translator`, {filename: './lib/translator.js'}),
-    languageId: composer.action(`watson-translation/languageId`, {filename: './lib/translator.js'})
+    languageId: composer.action(`watson-translation/languageId`, {filename: './lib/languageId.js'})
 }
 ```
  
@@ -98,7 +99,7 @@ module.exports = composer.try(
 ```
   
 
-`seed.yaml`: Here we use seed to inject parameters to the existing `en2shakespeare` function that is deployed by `composer`. 
+`seed.yaml`: Here we use seed to inject parameters to the `en2shakespeare` function deployed by `composer`. 
 
 ```yaml
 apiVersion: seed.ibm.com/v1
@@ -117,5 +118,4 @@ spec:
             name: ${projectName}-secret
             key: ftApiKey  
 ```
-
 
