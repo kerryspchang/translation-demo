@@ -7,7 +7,7 @@ This is a temporary place to record some ideas and discussions on designing a "c
 * To make building a reusable cloud composition easy and intuitive 
 
 ## Motivations
-* To provide a good getting started experience, we need to let customers quickly try out some interesting composition examples 
+* To provide a good getting started experience and being able to let customers quickly try out some interesting composition examples 
 * To create an ecosystem where developers could easily share their own compositions and also benefit from other people's work 
 
 ## Who are the users of a "composition project"? 
